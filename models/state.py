@@ -1,26 +1,28 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
+import string
+from tkinter import CASCADE
+from models import city
+from models.base_model import BaseModel,Base
+from sqlalchemy import column, String, Integer, DateTime,ForeignKey
 from sqlalchemy.orm import relationship
 from models.city import City
-import os
 
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state",
-                          cascade="all, delete-orphan")
+    name = column(string(128), nullable=False)
+    cities = relationship("city", backref="state",
+                            CASCADE="all, delete-orphan"
+    )
 
     @property
     def cities(self):
-        """getter attribute cities that returns the list of City"""
+        # getter attribute cities that retutns the list of city
         from models import storage
-        my_list = []
+        my_list =[]
         extracted_cities = storage.all(City).values()
         for city in extracted_cities:
-            if self.id == city.state_id:
-                my_list.append(city)
+            if self.id == City.state_id:
+                my_list.append(City)
         return my_list
